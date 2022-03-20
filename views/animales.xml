@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='animales_action' model='ir.actions.act_window'>
+        <field name="name">Animales</field> <!-- Nombre de la ventana -->
+        <field name="res_model">animales</field> <!-- Indicamos el modelo en el que se basa la vista -->
+        <field name="view_mode">tree,form</field> <!-- Indicamos los diferentes modos de visualización -->
+    </record>
+
+    <!-- Menú principal de la aplicación, es el primero que veremos en Odoo, cuando pulsemos el botón de aplicaciones -->
+    <menuitem name="Protectora" id="protectora_animales" />
+
+    <!-- Añadimos esta vista al menú principal -->
+    <menuitem name="Animales" id="animales" action="animales_action" parent="protectora_animales"/>
+
+    <!-- Vista en formato de árbol -->
+    <record id="animales_tree" model="ir.ui.view">
+        <field name="name">Lista de animales</field> <!-- Nombre de la vista -->
+        <field name="model">animales</field> <!-- Modelo usado en la vista -->
+        <field name="arch" type="xml">
+            <tree> <!-- Indicamos los campos del modelo a mostrar -->
+                <field name="id"/>
+                <field name="nombre"/>
+                <field name="especie"/>
+                <field name="raza"/>
+                <field name="edad"/>
+                <field name="sexo"/>
+                <field name="tamanyo"/>
+                <field name="urgente"/>                
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario -->
+    <record id="animales_view_form" model="ir.ui.view">
+        <field name="name">Formulario de alta para animales</field>
+        <field name="model">animales</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="id"/>
+                    <field name="nombre"/>
+                    <field name="chip"/>
+                    <field name="especie"/>
+                    <field name="raza"/>
+                    <field name="nacimiento"/>
+                    <field name="sexo"/>
+                    <field name="tamanyo"/>
+                    <field name="urgente"/>
+                    <field name="peso"/>
+                    <field name="esterilizado"/>
+                    <field name="exotico"/>
+                    <field name="pelo"/>
+                    <field name="permisoEspecial"/>
+                </group>
+
+                <group>
+                    <field name="observaciones"/>
+                    <field name="historia"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>
