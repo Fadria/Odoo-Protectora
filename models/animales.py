@@ -21,6 +21,7 @@ class Animales(models.Model):
     # VARIABLES QUE USAREMOS EN LOS CAMPOS SELECTION
 
     # Especies de los animales
+
     ESPECIES = [
         ('perro', 'Perro'),
         ('gato', 'Gato'),
