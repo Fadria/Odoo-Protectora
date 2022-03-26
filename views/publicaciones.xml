@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='publicaciones_action' model='ir.actions.act_window'>
+        <field name="name">Publicaciones</field> <!-- Nombre de la ventana -->
+        <field name="res_model">publicaciones</field> <!-- Indicamos el modelo en el que se basa la vista -->
+        <field name="view_mode">tree,form</field> <!-- Indicamos los diferentes modos de visualización -->
+    </record>
+
+    <!-- Añadimos esta vista al menú principal -->
+    <menuitem name="Publicaciones" id="publicaciones" action="publicaciones_action" parent="protectora_animales"/>
+
+    <!-- Vista en formato de árbol -->
+    <record id="publicaciones_tree" model="ir.ui.view">
+        <field name="name">Lista de publicaciones</field> <!-- Nombre de la vista -->
+        <field name="model">publicaciones</field> <!-- Modelo usado en la vista -->
+        <field name="arch" type="xml">
+            <!-- Indicamos los campos del modelo a mostrar -->
+
+            <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
+            <tree> 
+                <field name="id"/>
+                <field name="autor"/>
+                <field name="fechaPublicacion"/>
+                <field name="titulo"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario -->
+    <record id="publicaciones_view_form" model="ir.ui.view">
+        <field name="name">Formulario de alta para publicaciones</field>
+        <field name="model">publicaciones</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="autor"/>
+                    <field name="fechaPublicacion"/>
+                    <field name="imagenPortada" widget="image"/>
+                </group>
+
+                <group>
+                    <field name="titulo"/>
+                    <field name="contenido"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

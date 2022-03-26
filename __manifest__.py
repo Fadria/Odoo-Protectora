@@ -23,7 +23,8 @@
         'views/animales.xml',
         'views/usuarios.xml',
         'views/imagenes.xml',
-        'views/revisiones.xml'
+        'views/revisiones.xml',
+        'views/publicaciones.xml'
 
         # Ficheros usados para generar informes
 
