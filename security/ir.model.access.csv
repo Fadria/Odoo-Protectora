@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 acl_animales,animales_default,model_animales,,1,1,1,1
+acl_revisiones,revisiones_default,model_revisiones,,1,1,1,1
