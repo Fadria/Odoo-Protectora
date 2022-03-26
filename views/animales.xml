@@ -23,7 +23,6 @@
             <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
             <tree decoration-danger="urgente == True" decoration-bf="urgente == True"> 
                 <field name="id"/>
-                <field name="imagen" widget="image" class="oe_avatar" style="width:15mm; height:15mm;"/>
                 <field name="nombre"/>
                 <field name="especie"/>
                 <field name="raza"/>
@@ -43,7 +42,6 @@
         <field name="arch" type="xml">
             <form>
                 <group>
-                    <field name="id"/>
                     <field name="imagen" widget="image" class="oe_avatar"/>
                     <field name="nombre"/>
                     <field name="chip"/>
