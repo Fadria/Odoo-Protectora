@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='adopciones_action' model='ir.actions.act_window'>
+        <field name="name">Adopciones</field> <!-- Nombre de la ventana -->
+        <field name="res_model">adopciones</field> <!-- Indicamos el modelo en el que se basa la vista -->
+        <field name="view_mode">tree,form</field> <!-- Indicamos los diferentes modos de visualización -->
+    </record>
+
+    <!-- Añadimos esta vista al menú principal -->
+    <menuitem name="Adopciones" id="adopciones" action="adopciones_action" parent="protectora_animales"/>
+
+    <!-- Vista en formato de árbol -->
+    <record id="adopciones_tree" model="ir.ui.view">
+        <field name="name">Lista de adopciones</field> <!-- Nombre de la vista -->
+        <field name="model">adopciones</field> <!-- Modelo usado en la vista -->
+        <field name="arch" type="xml">
+            <!-- Indicamos los campos del modelo a mostrar -->
+
+            <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
+            <tree> 
+                <field name="id"/>
+                <field name="fecha"/>
+                <field name="animal"/>
+                <field name="dueño"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario -->
+    <record id="adopciones_view_form" model="ir.ui.view">
+        <field name="name">Formulario de alta para adopciones</field>
+        <field name="model">adopciones</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="fecha"/>
+                    <field name="animal"/>
+                    <field name="dueño"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

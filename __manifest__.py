@@ -24,7 +24,8 @@
         'views/usuarios.xml',
         'views/imagenes.xml',
         'views/revisiones.xml',
-        'views/publicaciones.xml'
+        'views/publicaciones.xml',
+        'views/adopciones.xml'
 
         # Ficheros usados para generar informes
 
