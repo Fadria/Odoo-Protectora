@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='usuarios_action' model='ir.actions.act_window'>
+        <field name="name">Usuarios</field> <!-- Nombre de la ventana -->
+        <field name="res_model">usuarios</field> <!-- Indicamos el modelo en el que se basa la vista -->
+        <field name="view_mode">tree,form</field> <!-- Indicamos los diferentes modos de visualización -->
+    </record>
+
+    <!-- Añadimos esta vista al menú principal -->
+    <menuitem name="Usuarios" id="usuarios" action="usuarios_action" parent="protectora_animales"/>
+
+    <!-- Vista en formato de árbol -->
+    <record id="usuarios_tree" model="ir.ui.view">
+        <field name="name">Lista de usuarios</field> <!-- Nombre de la vista -->
+        <field name="model">usuarios</field> <!-- Modelo usado en la vista -->
+        <field name="arch" type="xml">
+            <!-- Indicamos los campos del modelo a mostrar -->
+
+            <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
+            <tree> 
+                <field name="id"/>
+                <field name="usuario"/>
+                <field name="rol"/>
+                <field name="email"/>
+                <field name="permisoAdopcion"/>
+                <field name="telefono"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario -->
+    <record id="usuarios_view_form" model="ir.ui.view">
+        <field name="name">Formulario de alta para usuarios</field>
+        <field name="model">usuarios</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="id"/>
+                    <field name="usuario"/>
+                    <field name="rol"/>
+                    <field name="contrasenya" password="True"/>
+                    <field name="telefono"/>
+                    <field name="fechaNacimiento"/>
+                    <field name="permisoAdopcion"/>
+                </group>
+
+                <group>
+                    <field name="direccion"/>
+                    <field name="ciudad"/>
+                    <field name="codigoPostal"/>                
+                </group>
+
+                <group>
+                    <field name="horario"/>
+                    <field name="observaciones"/>
+                    <field name="foto" widget="image"/>                
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

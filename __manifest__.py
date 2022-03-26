@@ -21,6 +21,7 @@
 
         #Aqui distintas vistas de equipo (vistas diferentes, mismo modelo)
         'views/animales.xml',
+        'views/usuarios.xml',
         'views/imagenes.xml',
         'views/revisiones.xml'
 

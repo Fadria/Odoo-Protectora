@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 acl_animales,animales_default,model_animales,,1,1,1,1
+acl_usuarios,usuarios_default,model_usuarios,,1,1,1,1
 acl_imagenes,imagenes_default,model_imagenes,,1,1,1,1
 acl_revisiones,revisiones_default,model_revisiones,,1,1,1,1
