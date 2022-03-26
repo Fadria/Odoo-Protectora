@@ -47,6 +47,7 @@ class Animales(models.Model):
     # ATRIBUTOS
 
     nombre = fields.Char("Nombre", required=True)
+    imagen = fields.Image("Imagen")
     chip =  fields.Boolean("Chip")
     especie = fields.Selection(ESPECIES, default=ESPECIES[0][0])
     raza = fields.Char("Raza")

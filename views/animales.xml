@@ -18,8 +18,12 @@
         <field name="name">Lista de animales</field> <!-- Nombre de la vista -->
         <field name="model">animales</field> <!-- Modelo usado en la vista -->
         <field name="arch" type="xml">
-            <tree> <!-- Indicamos los campos del modelo a mostrar -->
+            <!-- Indicamos los campos del modelo a mostrar -->
+
+            <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
+            <tree decoration-danger="urgente == True" decoration-bf="urgente == True"> 
                 <field name="id"/>
+                <field name="imagen" widget="image" class="oe_avatar" style="width:15mm; height:15mm;"/>
                 <field name="nombre"/>
                 <field name="especie"/>
                 <field name="raza"/>
@@ -27,6 +31,7 @@
                 <field name="sexo"/>
                 <field name="tamanyo"/>
                 <field name="urgente"/>                
+                <field name="permisoEspecial"/>                
             </tree>
         </field>
     </record>
@@ -39,6 +44,7 @@
             <form>
                 <group>
                     <field name="id"/>
+                    <field name="imagen" widget="image" class="oe_avatar"/>
                     <field name="nombre"/>
                     <field name="chip"/>
                     <field name="especie"/>
