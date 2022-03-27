@@ -48,7 +48,7 @@ class Adopciones(models.Model):
 
     # Función usada para comprobar que no se introduce una fecha posterior a la actual
     @api.constrains('fecha')
-    def _check_release_date(self):
+    def comprobar_fecha_adopcion(self):
         # Bucle donde comprobaremos si el nuevo registro es correcto
         for record in self:
             # Comprobamos que la fecha no es posterior a la actual, si lo es lanzaríamos un error
