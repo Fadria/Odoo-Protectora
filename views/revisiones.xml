@@ -22,6 +22,7 @@
                 <field name="id"/>
                 <field name="fecha"/>
                 <field name="animal"/>
+                <field name="voluntario"/>
                 <field name="observaciones"/>
             </tree>
         </field>
@@ -36,6 +37,7 @@
                 <group>
                     <field name="fecha"/>
                     <field name="animal"/>
+                    <field name="voluntario"/>
                 </group>
 
                 <group>
