@@ -30,6 +30,7 @@
                 <field name="sexo"/>
                 <field name="tamanyo"/>
                 <field name="urgente"/>                
+                <field name="adoptado"/>                
                 <field name="permisoEspecial"/>                
             </tree>
         </field>
@@ -51,6 +52,7 @@
                     <field name="sexo"/>
                     <field name="tamanyo"/>
                     <field name="urgente"/>
+                    <field name="adoptado"/>                
                     <field name="peso"/>
                     <field name="esterilizado"/>
                     <field name="exotico"/>

@@ -55,6 +55,7 @@ class Animales(models.Model):
     edad = fields.Integer("Edad", compute="calcular_edad", store=False)
     sexo = fields.Selection(SEXO, default=SEXO[0][0])
     tamanyo = fields.Selection(TAMANYO, default=TAMANYO[0][0])
+    adoptado = fields.Boolean("Adoptado")
     urgente = fields.Boolean("Urgente")
     peso = fields.Float("Peso")
     esterilizado = fields.Boolean("Esterilizado")

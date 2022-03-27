@@ -23,6 +23,7 @@
                 <field name="fecha"/>
                 <field name="animal"/>
                 <field name="dueño"/>
+                <field name="vigente"/>
             </tree>
         </field>
     </record>
@@ -37,6 +38,7 @@
                     <field name="fecha"/>
                     <field name="animal"/>
                     <field name="dueño"/>
+                    <field name="vigente"/>
                 </group>
             </form>
         </field>
