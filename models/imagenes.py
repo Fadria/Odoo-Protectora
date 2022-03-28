@@ -28,7 +28,7 @@ class Imagenes(models.Model):
     
     # Función usada para comprobar que la fecha no es posterior a la actual
     @api.constrains('fecha')
-    def comprobar_fecha_revision(self):
+    def comprobar_fecha_imagenes(self):
         # Bucle donde comprobaremos si el nuevo registro es correcto
         for record in self:
 
