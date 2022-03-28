@@ -28,6 +28,7 @@ class Animales(models.Model):
         ('pajaro', 'Pájaro'),
         ('huron', 'Hurón'),
         ('fenec', 'Fénec'),
+        ('ajolote', 'Ajolote'),
         ('guacamayo', 'Guacamayo')
     ]
 
