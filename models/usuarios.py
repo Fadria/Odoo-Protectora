@@ -53,3 +53,8 @@ class Usuarios(models.Model):
         for record in self:
             record.edad = today.year - record.fechaNacimiento.year - ((today.month, today.day) 
             < (record.fechaNacimiento.month, record.fechaNacimiento.day))
+
+    # Constraints de SQL del modelo
+    _sql_constraints = [
+        ('usuario_uniq', 'UNIQUE (usuario)', 'El usuario ya existe.')
+    ]
