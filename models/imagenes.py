@@ -21,7 +21,7 @@ class Imagenes(models.Model):
     # ATRIBUTOS
     
     imagen = fields.Image("Imagen", required=True)
-    fecha = fields.Datetime("Fecha y hora de la revisión", required=True)
+    fecha = fields.Datetime("Fecha y hora de la imagen", required=True)
     animal = fields.Many2one('animales', store=True, required=True)
 
     # FUNCIONES
