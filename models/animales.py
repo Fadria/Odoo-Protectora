@@ -26,7 +26,9 @@ class Animales(models.Model):
         ('perro', 'Perro'),
         ('gato', 'Gato'),
         ('pajaro', 'Pájaro'),
-        ('huron', 'Hurón')
+        ('huron', 'Hurón'),
+        ('fenec', 'Fénec'),
+        ('guacamayo', 'Guacamayo')
     ]
 
     # Sexo de los animales
@@ -63,7 +65,7 @@ class Animales(models.Model):
     observaciones = fields.Html('Observaciones', sanitize=True, strip_style=False)
     pelo = fields.Boolean("¿Tiene pelo?")
     historia = fields.Html('Historia del animal', sanitize=True, strip_style=False)
-    permisoEspecial = fields.Boolean("¿Necesita un permiso especial?")
+    perroPeligroso = fields.Boolean("Perro potencialmente peligroso")
 
     # FUNCIONES
 

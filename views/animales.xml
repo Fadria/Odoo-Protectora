@@ -31,7 +31,7 @@
                 <field name="tamanyo"/>
                 <field name="urgente"/>                
                 <field name="adoptado"/>                
-                <field name="permisoEspecial"/>                
+                <field name="perroPeligroso"/>                
             </tree>
         </field>
     </record>
@@ -57,7 +57,7 @@
                     <field name="esterilizado"/>
                     <field name="exotico"/>
                     <field name="pelo"/>
-                    <field name="permisoEspecial"/>
+                    <field name="perroPeligroso"/>
                 </group>
 
                 <group>
