@@ -38,6 +38,7 @@
                 <group>
                     <field name="id"/>
                     <field name="usuario"/>
+                    <field name="nombreCompleto"/>
                     <field name="rol"/>
                     <field name="contrasenya" password="True"/>
                     <field name="telefono"/>

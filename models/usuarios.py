@@ -29,6 +29,7 @@ class Usuarios(models.Model):
     # ATRIBUTOS
 
     usuario = fields.Char("Usuario", required=True)
+    nombreCompleto = fields.Char("Nombre completo")
     rol = fields.Selection(ROLES, default=ROLES[0][0], required=True)
     email = fields.Char("Email")
     contrasenya = fields.Char("Contraseña", required=True)
