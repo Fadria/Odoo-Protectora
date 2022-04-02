@@ -10,7 +10,7 @@ class Animales(models.Model):
 
 
     # PARÁMETROS DE ORDENACIÓN POR DEFECTO
-    _order = 'nombre'
+    _order = 'adoptado asc, urgente desc, nombre asc'
 
 
     # Como no tenemos un atributo "name" en nuestro modelo, indicamos que cuando

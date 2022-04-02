@@ -10,7 +10,7 @@ class Usuarios(models.Model):
 
 
     # PARÁMETROS DE ORDENACIÓN POR DEFECTO
-    _order = 'rol asc, usuario desc'
+    _order = 'rol asc, usuario asc'
 
 
     # Como no tenemos un atributo "name" en nuestro modelo, indicamos que cuando
