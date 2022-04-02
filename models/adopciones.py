@@ -55,6 +55,15 @@ class Adopciones(models.Model):
             if record.fecha > datetime.now():
                 raise models.ValidationError('La fecha de adopción debe ser anterior a la actual')
 
+    # Función usada para comprobar que un PPP sólo puede ser adoptado por una persona que disponga del permiso necesario
+    @api.onchange('dueño')
+    def comprobar_permiso_ppp(self):
+        # Bucle donde comprobaremos si el animal puede ser adoptado por este usuario
+        for record in self:
+            # Comprobamos que se trata de un animal peligroso y que el dueño disponga del permiso necesario
+            if record.animal.perroPeligroso is True and record.dueño.permisoPPP is not True:
+                raise models.ValidationError('El usuario introducido no puede adoptar perros potencialmente peligrosos')
+
     # Función usada para impedir eliminar adopciones vigentes
     def unlink(self):
         if self.vigente == True:

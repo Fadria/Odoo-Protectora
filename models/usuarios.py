@@ -37,7 +37,7 @@ class Usuarios(models.Model):
     direccion = fields.Char("Dirección", required=True)
     ciudad = fields.Char("Ciudad", required=True)
     codigoPostal = fields.Char("Código postal", required=True)
-    permisoAdopcion = fields.Boolean("Permiso de adopción")
+    permisoPPP = fields.Boolean("Permiso de perro potencialmente peligroso")
     foto = fields.Image("Foto")
     observaciones = fields.Html('Observaciones', sanitize=True, strip_style=False)
     horario = fields.Char("Horario")

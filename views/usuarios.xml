@@ -23,7 +23,7 @@
                 <field name="usuario"/>
                 <field name="rol"/>
                 <field name="email"/>
-                <field name="permisoAdopcion"/>
+                <field name="permisoPPP"/>
                 <field name="telefono"/>
             </tree>
         </field>
@@ -44,7 +44,7 @@
                     <field name="contrasenya" password="True"/>
                     <field name="telefono"/>
                     <field name="fechaNacimiento"/>
-                    <field name="permisoAdopcion"/>
+                    <field name="permisoPPP"/>
                 </group>
 
                 <group>
