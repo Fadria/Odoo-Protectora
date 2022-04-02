@@ -40,6 +40,7 @@
                     <field name="usuario"/>
                     <field name="nombreCompleto"/>
                     <field name="rol"/>
+                    <field name="email"/>
                     <field name="contrasenya" password="True"/>
                     <field name="telefono"/>
                     <field name="fechaNacimiento"/>

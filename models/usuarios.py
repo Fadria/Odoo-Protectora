@@ -57,5 +57,6 @@ class Usuarios(models.Model):
 
     # Constraints de SQL del modelo
     _sql_constraints = [
-        ('usuario_uniq', 'UNIQUE (usuario)', 'El usuario ya existe.')
+        ('usuario_uniq', 'UNIQUE (usuario)', 'El usuario introducido ya existe.'),
+        ('email_uniq', 'UNIQUE (email)', 'El email introducido ya existe.')
     ]
