@@ -43,7 +43,7 @@ class Usuarios(models.Model):
     horario = fields.Char("Horario")
     fechaNacimiento = fields.Date("Fecha de nacimiento", required=True)
     edad = fields.Integer("Edad", compute="calcular_edad", store=False)
-
+    token = fields.Char("token")
 
     # FUNCIONES
 
