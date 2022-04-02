@@ -43,6 +43,6 @@ class Revisiones(models.Model):
         # Bucle donde comprobaremos si el nuevo registro es correcto
         for record in self:
 
-            # Si la fecha del registro es posterior a la actual lanzaremos una excepción
+            # Si el usuario no es un voluntario lanzaremos una excepción
             if record.voluntario.rol != "voluntario":
                 raise models.ValidationError('La persona que realiza la revisión debe ser un voluntario')

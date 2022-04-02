@@ -37,3 +37,13 @@ class Publicaciones(models.Model):
             # Si la fecha del registro es posterior a la actual lanzaremos una excepción
             if record.fechaPublicacion > datetime.now():
                 raise models.ValidationError('La fecha de publicación debe ser anterior a la actual')
+
+    # Función usada para comprobar que en el campo autor se ha asignado una persona con el rol voluntario
+    @api.constrains('autor')
+    def comprobar_autor(self):
+        # Bucle donde comprobaremos si el nuevo registro es correcto
+        for record in self:
+
+            # Si el usuario no es un voluntario lanzaremos una excepción
+            if record.autor.rol != "voluntario":
+                raise models.ValidationError('La persona que realiza la revisión debe ser un voluntario')
