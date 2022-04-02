@@ -64,6 +64,10 @@
                     <field name="observaciones"/>
                     <field name="historia"/>
                 </group>
+
+                <group>
+                    <field name="imagenes" widget="many2many" />
+                </group>
             </form>
         </field>
     </record>
