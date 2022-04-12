@@ -44,6 +44,7 @@ class Usuarios(models.Model):
     fechaNacimiento = fields.Date("Fecha de nacimiento", required=True)
     edad = fields.Integer("Edad", compute="calcular_edad", store=False)
     token = fields.Char("token")
+    tokenCaducidad = fields.Date("Fecha de caducidad del token")
 
     # FUNCIONES
 

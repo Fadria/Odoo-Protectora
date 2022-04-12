@@ -2,9 +2,15 @@
 from odoo import http
 from odoo.http import request
 import json
+from uuid import uuid4
+from datetime import date
 
 # Clase del controlador web
 class ApiRest(http.Controller):
+
+    '''
+        Función usada para realizar login. Recibirá un usuario, su contraseña y devolverá un token de acceso o un mensaje de error
+    '''
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
             methods=["POST"], type='http')
     def login(self, **args):
@@ -13,19 +19,31 @@ class ApiRest(http.Controller):
 
         if "usuario" in dicDatos and "contrasenya" in dicDatos:
             # Obtenemos una lista de usuarios que cumplan con la búsqueda
-            bdData = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
+            record = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
 
-            # Comprobamos si el tamaño de la lista es mayor de 0, en el caso de que encontremos un resultado
-            if len(bdData) > 0:
-                # Obtenemos los datos del usuario
-                usuario = bdData.read()[0]
+            # Comprobamos que se ha encontrado al menos un usuario
+            if record and record[0]:
+                for usuario in record:
+                    # Si la contraseña es correcta devolveremos un token de acceso
+                    if usuario["contrasenya"] == dicDatos["contrasenya"]:
 
-                # Si la contraseña es correcta devolveremos un token de acceso
-                if usuario["contrasenya"] == dicDatos["contrasenya"]:
+                        # Generamos un token para que el usuario pueda iniciar sesión automáticamente en posteriores ocasiones
+                        token = uuid4()
+                        
+                        # Sobreescribimos el token y la fecha de caducidad de este en el registro del usuario
+                        usuario.token = token
+                        usuario.tokenCaducidad = date.today()
 
-                    # TODO GENERAR EL TOKEN Y ALMACENARLO EN LA ENTIDAD DEL USUARIO PARA VALIDARLO EN EL ENDPOINT CHECK_TOKEN
-                    return "{'token':'WIP: generador de token'}"
+                        # Enviamos una respuesta que contendrá el token y el estado OK
+                        return http.Response( 
+                        json.dumps({"token": str(token), "estado": "ok"}, default=str), 
+                            status=200,
+                            mimetype='application/json'
+                        )
 
-            return "{'estado':'error'}"
-        else:
-            return "{'estado':'error'}"
+        # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
+        return http.Response( 
+        json.dumps({"estado": "error"}, default=str), 
+            status=200,
+            mimetype='application/json'
+        )
