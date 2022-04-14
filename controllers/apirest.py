@@ -8,6 +8,8 @@ from datetime import date
 # Clase del controlador web
 class ApiRest(http.Controller):
 
+    ip = "http://192.168.1.135:8069"
+
     '''
         Función usada para realizar login. Recibirá un usuario, su contraseña y devolverá un token de acceso o un mensaje de error
     '''
@@ -41,7 +43,7 @@ class ApiRest(http.Controller):
                         diccionarioRespuesta["rol"] = usuario.rol # Rol del usuario
 
                         # Añadimos la foto del usuario a la respuesta
-                        diccionarioRespuesta["foto"] = "http://192.168.1.135:8069/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
+                        diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
 
                         # Enviamos una respuesta que contendrá el token y el estado OK
                         return http.Response( 
