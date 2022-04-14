@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 from odoo import http
 from odoo.http import request
-import json
-from uuid import uuid4
+import json # Manejo del formato JSON
+from uuid import uuid4 # Generación de tokenks
+
+# Librerías relacionadas con la fecha
 from datetime import date
 import datetime
+
+# Librerías usadas para enviar emails
+import smtplib
+from email.mime.text import MIMEText
 
 # Clase del controlador web
 class ApiRest(http.Controller):
 
     ip = "http://192.168.1.135:8069"
 
-    '''
-        Función usada para realizar login. Recibirá un usuario, su contraseña y devolverá un token de acceso o un mensaje de error
-    '''
+    # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
             methods=["POST"], type='http')
     def login(self, **args):
@@ -59,9 +63,7 @@ class ApiRest(http.Controller):
                 mimetype='application/json'
         )
 
-    '''
-        Función usada para registrar un usuario
-    '''
+    # Función usada para realizar un registro
     @http.route('/apirest/registro', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='http')
     def registro(self, **args):
@@ -104,6 +106,53 @@ class ApiRest(http.Controller):
                 )
         except:
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido crear el usuario
+            return http.Response( 
+                json.dumps({"estado": "error"}, default=str), 
+                    status=200,
+                    mimetype='application/json'
+            )
+
+    # Función usada para recuperar la contraseña
+    @http.route('/apirest/recuperarContrasenya', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def recuperarContrasenya(self, **args):
+        # Cargamos los datos recibidos en la petición
+        dicDatos = json.loads(args['data'])
+
+        try:
+            # Recuperamos el usuario al que cambiar la contraseña
+            record = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
+            record.contrasenya = uuid4()
+
+            html = ("""\
+            <html>
+            <body>
+                <h1>Solicitud de recuperación de contraseña</h1>
+                <p>Saludos, """ +  record.usuario + """, has recibido este correo electrónico porque has olvidado tu contraseña de la aplicación NuevoLazo. Si piensas que has recibido este correo electrónico por equivocación, contacta con nosotros a través de fadriacarrasco@gmail.com</p>
+                <p>Ya no podrás iniciar sesión en tu cuenta con la contraseña antigua. Para restablecer la contraseña, accede a la aplicación con la contraseña """ + record.contrasenya + """, donde puedes cambiarla desde la sección de Mi Perfil.</p>
+            </body>
+            </html>
+            """)
+
+            msg = MIMEText(html, "html")
+            msg['Subject'] = "Solicitud de recuperación de contraseña"
+            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['To']      = record.email
+
+            s = smtplib.SMTP('smtp.mailgun.org', 587)
+
+            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.sendmail(msg['From'], msg['To'], msg.as_string())
+            s.quit()        
+
+            # Enviamos una respuesta que contendrá el estado ok
+            return http.Response( 
+                json.dumps({"estado": "ok"}, default=str), 
+                    status=200,
+                    mimetype='application/json'
+            )        
+        except:
+            # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
             return http.Response( 
                 json.dumps({"estado": "error"}, default=str), 
                     status=200,
