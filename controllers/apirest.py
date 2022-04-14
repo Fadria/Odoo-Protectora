@@ -34,9 +34,18 @@ class ApiRest(http.Controller):
                         usuario.token = token
                         usuario.tokenCaducidad = date.today()
 
+                        # Preparamos la respuesta a enviar
+                        diccionarioRespuesta = {} # Diccionario de la respuesta
+                        diccionarioRespuesta["token"] = token # Se almacenará en el teléfono para evitar loguearse en 30 días
+                        diccionarioRespuesta["usuario"] = usuario.usuario # Nombre del usuario
+                        diccionarioRespuesta["rol"] = usuario.rol # Rol del usuario
+
+                        # Añadimos la foto del usuario a la respuesta
+                        diccionarioRespuesta["foto"] = "http://192.168.1.135:8069/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
+
                         # Enviamos una respuesta que contendrá el token y el estado OK
                         return http.Response( 
-                        json.dumps({"token": str(token), "estado": "ok"}, default=str), 
+                        json.dumps({"data": diccionarioRespuesta, "estado": "ok"}, default=str), 
                             status=200,
                             mimetype='application/json'
                         )
