@@ -15,6 +15,7 @@ from email.mime.text import MIMEText
 # Clase del controlador web
 class ApiRest(http.Controller):
 
+    # IP de nuestro servidor Odoo
     ip = "http://192.168.1.135:8069"
 
     # Función usada para realizar un login
@@ -25,6 +26,8 @@ class ApiRest(http.Controller):
         # Cargamos los datos recibidos en la petición
         dicDatos = json.loads(request.httprequest.data)
         dicDatos = dicDatos["data"]
+
+        diccionarioRespuesta = {} # Diccionario de la respuesta
 
         if "email" in dicDatos and "contrasenya" in dicDatos:
             # Obtenemos una lista de usuarios que cumplan con la búsqueda
@@ -44,22 +47,22 @@ class ApiRest(http.Controller):
                         usuario.tokenCaducidad = date.today()
 
                         # Preparamos la respuesta a enviar
-                        diccionarioRespuesta = {} # Diccionario de la respuesta
                         diccionarioRespuesta["token"] = usuario.token # Se almacenará en el teléfono para evitar loguearse en 30 días
                         diccionarioRespuesta["usuario"] = usuario.usuario # Nombre del usuario
                         diccionarioRespuesta["rol"] = usuario.rol # Rol del usuario
+                        
                         # Añadimos la url de la foto del usuario a la respuesta
                         diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
+                        
+                        # Indicamos el estado del resultado
+                        diccionarioRespuesta["status"] = "ok"
 
                         # Devolvemos la respuesta en el formato cadena
                         return str(diccionarioRespuesta)
 
         # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
-        return http.Response( 
-            json.dumps({"estado": "error"}, default=str), 
-                status=200,
-                mimetype='application/json'
-        )
+        diccionarioRespuesta["status"] = "error"
+        return str(diccionarioRespuesta)
 
     # Función usada para realizar un registro
     @http.route('/apirest/registro', auth="none", cors='*', csrf=False,
