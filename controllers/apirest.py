@@ -51,8 +51,6 @@ class ApiRest(http.Controller):
                         # Añadimos la url de la foto del usuario a la respuesta
                         diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
 
-                        # Enviamos una respuesta que contendrá los datos del usuario necesarios y el estado ok
-
                         # Devolvemos la respuesta en el formato cadena
                         return str(diccionarioRespuesta)
 
