@@ -19,14 +19,16 @@ class ApiRest(http.Controller):
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
-            methods=["POST"], type='http')
+            methods=["POST"], type='json')
+            
     def login(self, **args):
         # Cargamos los datos recibidos en la petición
-        dicDatos = json.loads(args['data'])
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
 
-        if "usuario" in dicDatos and "contrasenya" in dicDatos:
+        if "email" in dicDatos and "contrasenya" in dicDatos:
             # Obtenemos una lista de usuarios que cumplan con la búsqueda
-            record = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
+            record = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
 
             # Comprobamos que se ha encontrado al menos un usuario
             if record and record[0]:
@@ -43,18 +45,16 @@ class ApiRest(http.Controller):
 
                         # Preparamos la respuesta a enviar
                         diccionarioRespuesta = {} # Diccionario de la respuesta
-                        diccionarioRespuesta["token"] = token # Se almacenará en el teléfono para evitar loguearse en 30 días
+                        diccionarioRespuesta["token"] = usuario.token # Se almacenará en el teléfono para evitar loguearse en 30 días
                         diccionarioRespuesta["usuario"] = usuario.usuario # Nombre del usuario
                         diccionarioRespuesta["rol"] = usuario.rol # Rol del usuario
                         # Añadimos la url de la foto del usuario a la respuesta
                         diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(usuario.id) + "&field=foto"
 
                         # Enviamos una respuesta que contendrá los datos del usuario necesarios y el estado ok
-                        return http.Response( 
-                        json.dumps({"data": diccionarioRespuesta, "estado": "ok"}, default=str), 
-                            status=200,
-                            mimetype='application/json'
-                        )
+
+                        # Devolvemos la respuesta en el formato cadena
+                        return str(diccionarioRespuesta)
 
         # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
         return http.Response( 
