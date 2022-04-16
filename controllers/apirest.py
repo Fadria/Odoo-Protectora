@@ -154,10 +154,13 @@ class ApiRest(http.Controller):
 
     # Función usada para recuperar la contraseña
     @http.route('/apirest/recuperarContrasenya', auth="none", cors='*', csrf=False,
-                methods=["GET"], type='http')
+                methods=["POST"], type='json')
     def recuperarContrasenya(self, **args):
         # Cargamos los datos recibidos en la petición
-        dicDatos = json.loads(args['data'])
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
+        
+        diccionarioRespuesta = {} # Diccionario de la respuesta
 
         try:
             # Recuperamos el usuario al que cambiar la contraseña
@@ -186,15 +189,11 @@ class ApiRest(http.Controller):
             s.quit()        
 
             # Enviamos una respuesta que contendrá el estado ok
-            return http.Response( 
-                json.dumps({"estado": "ok"}, default=str), 
-                    status=200,
-                    mimetype='application/json'
-            )        
+            diccionarioRespuesta["status"] = "ok"
+            return str(diccionarioRespuesta)
+
         except:
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
-            return http.Response( 
-                json.dumps({"estado": "error"}, default=str), 
-                    status=200,
-                    mimetype='application/json'
-            )
+            diccionarioRespuesta["status"] = "error"
+            return str(diccionarioRespuesta)
+
