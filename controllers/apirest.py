@@ -105,11 +105,14 @@ class ApiRest(http.Controller):
 
     # Función usada para realizar un registro
     @http.route('/apirest/registro', auth="none", cors='*', csrf=False,
-                methods=["POST"], type='http')
+                methods=["POST"], type='json')
     def registro(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
         try:
             # Cargamos los datos recibidos en la petición
-            dicDatos = json.loads(args['data'])
+            dicDatos = json.loads(request.httprequest.data)
+            dicDatos = dicDatos["data"]
 
             # Damos el formato necesario a la fecha de nacimiento
             dicDatos["fechaNacimiento"] = datetime.datetime.strptime(dicDatos["fechaNacimiento"], '%Y-%m-%d')
@@ -131,26 +134,26 @@ class ApiRest(http.Controller):
             record.tokenCaducidad = date.today()
 
             # Preparamos la respuesta a enviar
-            diccionarioRespuesta = {} # Diccionario de la respuesta
-            diccionarioRespuesta["token"] = token # Se almacenará en el teléfono para evitar loguearse en 30 días
+            diccionarioRespuesta["token"] = record.token # Se almacenará en el teléfono para evitar loguearse en 30 días
             diccionarioRespuesta["usuario"] = record.usuario # Nombre del usuario
             diccionarioRespuesta["rol"] = record.rol # Rol del usuario
             # Añadimos la url de la foto del usuario a la respuesta
             diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(record.id) + "&field=foto"
 
             # Enviamos una respuesta que contendrá los datos del usuario necesarios y el estado ok
-            return http.Response(
-                    json.dumps({"data": diccionarioRespuesta, "estado": "ok"}, default=str),
-                        status=200,
-                        mimetype='application/json'
-                )
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "ok"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)
         except:
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido crear el usuario
-            return http.Response( 
-                json.dumps({"estado": "error"}, default=str), 
-                    status=200,
-                    mimetype='application/json'
-            )
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "error"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)
+
 
     # Función usada para recuperar la contraseña
     @http.route('/apirest/recuperarContrasenya', auth="none", cors='*', csrf=False,
