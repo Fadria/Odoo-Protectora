@@ -114,6 +114,23 @@ class ApiRest(http.Controller):
             dicDatos = json.loads(request.httprequest.data)
             dicDatos = dicDatos["data"]
 
+            # Comprobamos si el email está en uso
+            record = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
+
+            # Está en uso, devolvemos un error
+            if record and record[0]:
+                diccionarioRespuesta["status"] = "emailUsado"
+                return str(diccionarioRespuesta)
+
+
+            # Comprobamos si el usuario está en uso
+            record = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
+
+            # Está en uso, devolvemos un error
+            if record and record[0]:
+                diccionarioRespuesta["status"] = "usuarioUsado"
+                return str(diccionarioRespuesta)
+
             # Damos el formato necesario a la fecha de nacimiento
             dicDatos["fechaNacimiento"] = datetime.datetime.strptime(dicDatos["fechaNacimiento"], '%Y-%m-%d')
 
@@ -137,8 +154,6 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["token"] = record.token # Se almacenará en el teléfono para evitar loguearse en 30 días
             diccionarioRespuesta["usuario"] = record.usuario # Nombre del usuario
             diccionarioRespuesta["rol"] = record.rol # Rol del usuario
-            # Añadimos la url de la foto del usuario a la respuesta
-            diccionarioRespuesta["foto"] = self.ip + "/web/image?model=usuarios&id=" + str(record.id) + "&field=foto"
 
             # Enviamos una respuesta que contendrá los datos del usuario necesarios y el estado ok
             # Indicamos el estado del resultado
