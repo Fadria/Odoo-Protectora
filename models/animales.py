@@ -25,7 +25,6 @@ class Animales(models.Model):
     ESPECIES = [
         ('perro', 'Perro'),
         ('gato', 'Gato'),
-        ('pajaro', 'Pájaro'),
         ('huron', 'Hurón'),
         ('fenec', 'Fénec'),
         ('ajolote', 'Ajolote'),
