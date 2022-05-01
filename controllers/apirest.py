@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.135:8069"
+    ip = "http://192.168.1.133:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -214,4 +214,3 @@ class ApiRest(http.Controller):
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
-
