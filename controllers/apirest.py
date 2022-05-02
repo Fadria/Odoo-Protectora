@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.133:8069"
+    ip = "http://192.168.1.134:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -214,3 +214,33 @@ class ApiRest(http.Controller):
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
+
+    @http.route('/apirest/logout', auth="none", cors='*', csrf=False,
+                methods=["POST"], type='json')
+    def logout(self, **args):
+        # Cargamos los datos recibidos en la petición
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
+
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
+        if "token" in dicDatos:
+            # Obtenemos una lista de usuarios que cumplan con la búsqueda
+            record = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
+
+            # Comprobamos que se ha encontrado al menos un usuario
+            if record and record[0]:
+                for usuario in record:
+                    # Sobreescribimos el token y la fecha de caducidad y los dejamos sin valor
+                    usuario.token = None
+                    usuario.tokenCaducidad = None
+                    
+                    # Indicamos el estado del resultado
+                    diccionarioRespuesta["status"] = "ok"
+
+                    # Devolvemos la respuesta en el formato cadena
+                    return str(diccionarioRespuesta)
+
+        # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
+        diccionarioRespuesta["status"] = "error"
+        return str(diccionarioRespuesta)
