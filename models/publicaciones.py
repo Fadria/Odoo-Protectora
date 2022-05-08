@@ -23,7 +23,7 @@ class Publicaciones(models.Model):
     imagenPortada = fields.Image("Imagen de portada")
     fechaPublicacion = fields.Datetime("Fecha y hora de la publicación", required=True)
     titulo = fields.Char("Título de la publicación", required=True)
-    contenido = fields.Html('Contenido', sanitize=True, strip_style=False, required=True)
+    contenido = fields.Text('Contenido', required=True)
     autor = fields.Many2one("usuarios", "Autor", required=True) # Relación con el modelo de usuarios
 
     # FUNCIONES

@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.134:8069"
+    ip = "http://192.168.1.135:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -215,6 +215,7 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
 
+    # Función usada para realizar un logout
     @http.route('/apirest/logout', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def logout(self, **args):
@@ -243,4 +244,75 @@ class ApiRest(http.Controller):
 
         # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
         diccionarioRespuesta["status"] = "error"
+        return str(diccionarioRespuesta)
+
+    # Función que nos devolverá el listado de publicaciones
+    @http.route('/apirest/publicaciones', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def publicaciones(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaPublicaciones = [] # Listado de publicaciones
+
+        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        record = http.request.env["publicaciones"].sudo().search([])
+
+        # Comprobamos que se ha encontrado al menos una publicación
+        if record and record[0]:
+            for publicacion in record:
+                # Inicializamos el diccionario que contendrá los datos de la publicación
+                diccionarioPublicacion = {}
+
+                # Indicamos sus valores
+                diccionarioPublicacion["id"] = publicacion.id
+                diccionarioPublicacion["titulo"] = publicacion.titulo[0:20] + "..."
+                diccionarioPublicacion["fechaPublicacion"] = publicacion.fechaPublicacion.strftime("%d/%m/%y")
+                diccionarioPublicacion["imagenPortada"] = self.ip + "/web/image?model=publicaciones&id=" + str(publicacion.id) + "&field=imagenPortada"
+                diccionarioPublicacion["autor"] = publicacion.autor.nombreCompleto
+                diccionarioPublicacion["contenido"] = publicacion.contenido[0:35] + "..."
+
+                # La añadimos al listado
+                listaPublicaciones.append(diccionarioPublicacion)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaPublicaciones
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)
+
+    # Función que nos devolverá los datos de una publicación
+    @http.route('/apirest/publicaciones/<idPublicacion>', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def obtenerPublicacion(self, idPublicacion, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaPublicaciones = [] # Listado de publicaciones
+
+        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        record = http.request.env["publicaciones"].sudo().search([("id", "=", idPublicacion)])
+
+        # Comprobamos que se ha encontrado al menos una publicación
+        if record and record[0]:
+            for publicacion in record:
+                # Inicializamos el diccionario que contendrá los datos de la publicación
+                diccionarioPublicacion = {}
+
+                # Indicamos sus valores
+                diccionarioPublicacion["titulo"] = publicacion.titulo
+                diccionarioPublicacion["fechaPublicacion"] = publicacion.fechaPublicacion.strftime("%d/%m/%y")
+                diccionarioPublicacion["imagenPortada"] = self.ip + "/web/image?model=publicaciones&id=" + str(publicacion.id) + "&field=imagenPortada"
+                diccionarioPublicacion["autor"] = publicacion.autor.nombreCompleto
+                diccionarioPublicacion["contenido"] = publicacion.contenido
+
+                # La añadimos al listado
+                listaPublicaciones.append(diccionarioPublicacion)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaPublicaciones
+
+        # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
