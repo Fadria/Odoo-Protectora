@@ -316,3 +316,36 @@ class ApiRest(http.Controller):
 
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
+
+    # Función que nos devolverá el listado de gráficos
+    @http.route('/apirest/graficos', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def graficos(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaGraficos = [] # Listado de gráficos
+
+        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        record = http.request.env["graficos"].sudo().search([])
+
+        # Comprobamos que se ha encontrado al menos un gráfico
+        if record and record[0]:
+            for grafico in record:
+                # Inicializamos el diccionario que contendrá los datos del gráfico
+                diccionarioGrafico = {}
+
+                # Indicamos sus valores
+                diccionarioGrafico["imagen"] = self.ip + "/web/image?model=graficos&id=" + str(grafico.id) + "&field=imagen"
+                diccionarioGrafico["titulo"] = grafico.titulo
+                diccionarioGrafico["fecha"] = grafico.fecha.strftime("%d/%m/%y")
+
+                # La añadimos al listado
+                listaGraficos.append(diccionarioGrafico)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaGraficos
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)        

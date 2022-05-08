@@ -5,3 +5,4 @@ from . import imagenes
 from . import revisiones
 from . import publicaciones
 from . import adopciones
+from . import graficos

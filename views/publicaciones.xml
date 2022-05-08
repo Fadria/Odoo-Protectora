@@ -16,8 +16,6 @@
         <field name="model">publicaciones</field> <!-- Modelo usado en la vista -->
         <field name="arch" type="xml">
             <!-- Indicamos los campos del modelo a mostrar -->
-
-            <!-- Si es una adopción urgente usaremos texto en rojo y negrita-->
             <tree> 
                 <field name="id"/>
                 <field name="autor"/>
