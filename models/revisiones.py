@@ -23,7 +23,7 @@ class Revisiones(models.Model):
     fecha = fields.Datetime("Fecha y hora de la revisión", required=True)
     animal = fields.Many2one('animales', store=True, required=True)
     voluntario = fields.Many2one('usuarios', store=True, required=True)
-    observaciones = fields.Html('Observaciones', sanitize=True, strip_style=False, required=True)
+    observaciones = fields.Text('Observaciones', required=True)
 
     # FUNCIONES
     

@@ -349,3 +349,84 @@ class ApiRest(http.Controller):
 
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)        
+
+    # Función que nos devolverá los datos de una publicación
+    @http.route('/apirest/revisiones/<idAnimal>', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def obtenerRevisiones(self, idAnimal, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaRevisiones = [] # Listado de revisiones
+
+        # Obtenemos la lista de revisiones del animal
+        record = http.request.env["revisiones"].sudo().search([("animal.id", "=", idAnimal)])
+
+        # Comprobamos que se ha encontrado al menos una revisión
+        if record and record[0]:
+            for revision in record:
+                # Inicializamos el diccionario que contendrá los datos de la revisión
+                diccionarioRevision = {}
+
+                # Indicamos sus valores
+                diccionarioRevision["nombreVoluntario"] = revision.voluntario.nombreCompleto
+                diccionarioRevision["fecha"] = revision.fecha.strftime("%d/%m/%y")
+                diccionarioRevision["observaciones"] = revision.observaciones
+
+                # La añadimos al listado
+                listaRevisiones.append(diccionarioRevision)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaRevisiones
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)      
+
+        diccionarioRespuesta["status"] = "vacio"
+        return str(diccionarioRespuesta)
+
+    # Función usada para crear un nuevo registro
+    @http.route('/apirest/nuevaRevision', auth="none", cors='*', csrf=False,
+                methods=["POST"], type='json')
+    def nuevaRevision(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
+        try:
+            # Cargamos los datos recibidos en la petición
+            dicDatos = json.loads(request.httprequest.data)
+            dicDatos = dicDatos["data"]
+
+            # COMPROBAR SI EL TOKEN PERTENECE A UN USUARIO VOLUTARIO
+
+            # Comprobamos si el token pertenece a un voluntario
+            usuario = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
+
+            # No es voluntario, devolvemos el diccionario vacío
+            if usuario and usuario[0] and usuario[0].rol != "voluntario":
+                return str(diccionarioRespuesta)
+
+            # Preparamos el objeto a crear
+            dicRevision = {}
+            dicRevision["fecha"] = dicDatos["fecha"]
+            dicRevision["animal"] = dicDatos["id"]
+            dicRevision["observaciones"] = dicDatos["observaciones"]
+            dicRevision["voluntario"] = usuario.id
+
+            # Creamos la revisión
+            request.env["revisiones"].sudo().create(
+                # Indicamos el diccionario que usaremos para crear la revisión
+                dicRevision
+            )
+
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "ok"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)
+        except:
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "error"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)        
