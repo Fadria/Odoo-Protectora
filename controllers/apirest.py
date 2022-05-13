@@ -474,3 +474,116 @@ class ApiRest(http.Controller):
 
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
+
+    # Función que nos devolverá el listado de animales filtrados
+    @http.route('/apirest/filtrarAnimales', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='json')
+    def filtrarAnimales(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaAnimales = [] # Listado de animales
+
+        # Cargamos los datos recibidos en la petición
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
+
+        buscarDatos = True # Variable que cambiaremos a false cuando no sea necesario realizar más consultas
+
+        # Obtenemos una lista de animales
+        record = http.request.env["animales"].sudo().search([ ('especie', '=', dicDatos["especie"]), ('sexo', '=', dicDatos["sexo"]), ('tamanyo', '=', dicDatos["tamanyo"]) ])            
+
+        # Comprobamos que se ha encontrado al menos un animal
+        if record and record[0]:
+            for animal in record:
+                # Inicializamos el diccionario que contendrá los animales
+                diccionarioAnimal = {}
+
+                # Indicamos sus valores
+                diccionarioAnimal["id"] = animal.id
+                diccionarioAnimal["nombre"] = animal.nombre
+                diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
+                diccionarioAnimal["especie"] = animal.especie
+                diccionarioAnimal["edad"] = animal.edad
+                diccionarioAnimal["sexo"] = animal.sexo
+                diccionarioAnimal["tamanyo"] = animal.tamanyo
+
+                # La añadimos al listado
+                listaAnimales.append(diccionarioAnimal)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Desordenamos la lista de animales para impedir que se discriminen según cuándo se dieron de alta en el sistema
+            random.shuffle(listaAnimales)
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaAnimales
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)        
+
+    # Función que nos devolverá los datos de un animal
+    @http.route('/apirest/animales/<id>', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def obtenerRevisiones(self, id, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaDatos = [] # Listado que contendrá los datos del animal
+
+        # Obtenemos la lista de revisiones del animal
+        record = http.request.env["animales"].sudo().search([("id", "=", id)])
+
+        # Comprobamos que se ha encontrado un animal
+        if record and record[0]:
+            for animal in record:
+                # Inicializamos el diccionario que contendrá los datos del animal
+                diccionarioAnimal = {}
+
+                # Indicamos sus valores
+                diccionarioAnimal["id"] = animal.id
+                diccionarioAnimal["nombre"] = animal.nombre
+                diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
+                diccionarioAnimal["chip"] = animal.chip
+                diccionarioAnimal["especie"] = animal.especie
+                diccionarioAnimal["raza"] = animal.raza
+                diccionarioAnimal["nacimiento"] = animal.nacimiento.strftime("%d/%m/%y")
+                diccionarioAnimal["edad"] = animal.edad
+                diccionarioAnimal["sexo"] = animal.sexo
+                diccionarioAnimal["tamanyo"] = animal.tamanyo
+                diccionarioAnimal["urgente"] = animal.urgente
+                diccionarioAnimal["peso"] = animal.peso
+                diccionarioAnimal["esterilizado"] = animal.esterilizado
+                diccionarioAnimal["exotico"] = animal.exotico
+                diccionarioAnimal["observaciones"] = animal.observaciones
+                diccionarioAnimal["pelo"] = animal.pelo
+                diccionarioAnimal["historia"] = animal.historia
+                diccionarioAnimal["perroPeligroso"] = animal.perroPeligroso
+
+                listaImagenes = [] # Lista donde guardaremos las imágenes del animal
+
+                # Obtenemos las imágenes del animal
+                imagenes = http.request.env["imagenes"].sudo().search([("animal.id", "=", id)])
+
+                # Preparamos el diccionario con las imágenes
+                if imagenes and imagenes[0]:
+                    for imagen in imagenes:
+                        diccionarioImagen = {}
+                        diccionarioImagen["fecha"] = imagen.fecha.strftime("%d/%m/%y")
+                        diccionarioImagen["imagen"] = self.ip + "/web/image?model=imagenes&id=" + str(imagen.id) + "&field=imagen"
+
+                        listaImagenes.append(diccionarioImagen)
+
+                diccionarioAnimal["imagenes"] = listaImagenes
+
+                # Añadimos el diccionario al listado
+                listaDatos.append(diccionarioAnimal)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaDatos
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)      
+
+        diccionarioRespuesta["status"] = "vacio"
+        return str(diccionarioRespuesta)        
