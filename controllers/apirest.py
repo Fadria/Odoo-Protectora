@@ -367,6 +367,7 @@ class ApiRest(http.Controller):
                 diccionarioRevision = {}
 
                 # Indicamos sus valores
+                diccionarioRevision["idAnimal"] = revision.animal.id
                 diccionarioRevision["nombreVoluntario"] = revision.voluntario.nombreCompleto
                 diccionarioRevision["fecha"] = revision.fecha.strftime("%d/%m/%y")
                 diccionarioRevision["observaciones"] = revision.observaciones
