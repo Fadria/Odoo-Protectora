@@ -13,11 +13,14 @@ from dateutil.relativedelta import relativedelta # Librería con la que podremos
 import smtplib
 from email.mime.text import MIMEText
 
+# Librería usada para desordenar listas
+import random
+
 # Clase del controlador web
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.135:8069"
+    ip = "http://192.168.1.134:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -431,3 +434,43 @@ class ApiRest(http.Controller):
 
             # Devolvemos la respuesta en el formato cadena
             return str(diccionarioRespuesta)        
+
+    # Función que nos devolverá el listado de animales
+    @http.route('/apirest/animales', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def animales(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaAnimales = [] # Listado de animales
+
+        # Obtenemos una lista de animales
+        record = http.request.env["animales"].sudo().search([])
+
+        # Comprobamos que se ha encontrado al menos un animal
+        if record and record[0]:
+            for animal in record:
+                # Inicializamos el diccionario que contendrá los animales
+                diccionarioAnimal = {}
+
+                # Indicamos sus valores
+                diccionarioAnimal["id"] = animal.id
+                diccionarioAnimal["nombre"] = animal.nombre
+                diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
+                diccionarioAnimal["especie"] = animal.especie
+                diccionarioAnimal["edad"] = animal.edad
+                diccionarioAnimal["sexo"] = animal.sexo
+                diccionarioAnimal["tamanyo"] = animal.tamanyo
+
+                # La añadimos al listado
+                listaAnimales.append(diccionarioAnimal)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Desordenamos la lista de animales para impedir que se discriminen según cuándo se dieron de alta en el sistema
+            random.shuffle(listaAnimales)
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaAnimales
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)
