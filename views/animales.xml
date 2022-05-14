@@ -68,6 +68,10 @@
                 <group>
                     <field name="imagenes" widget="many2many" />
                 </group>
+
+                <group>
+                    <field name="revisiones" widget="many2many" />
+                </group>
             </form>
         </field>
     </record>
