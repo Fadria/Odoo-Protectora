@@ -67,6 +67,7 @@ class Animales(models.Model):
     historia = fields.Html('Historia del animal', sanitize=True, strip_style=False)
     perroPeligroso = fields.Boolean("Perro potencialmente peligroso")
     imagenes = fields.One2many("imagenes", "animal")
+    revisiones = fields.One2many("revisiones", "animal")
 
     # FUNCIONES
 
