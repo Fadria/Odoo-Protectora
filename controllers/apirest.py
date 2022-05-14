@@ -455,10 +455,10 @@ class ApiRest(http.Controller):
                 diccionarioAnimal["id"] = animal.id
                 diccionarioAnimal["nombre"] = animal.nombre
                 diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
-                diccionarioAnimal["especie"] = animal.especie
+                diccionarioAnimal["especie"] = animal.especie.capitalize()
                 diccionarioAnimal["edad"] = animal.edad
                 diccionarioAnimal["sexo"] = animal.sexo
-                diccionarioAnimal["tamanyo"] = animal.tamanyo
+                diccionarioAnimal["tamanyo"] = animal.tamanyo if animal.tamanyo != "pequenyo" else "pequeño"
 
                 # La añadimos al listado
                 listaAnimales.append(diccionarioAnimal)                                
@@ -501,10 +501,10 @@ class ApiRest(http.Controller):
                 diccionarioAnimal["id"] = animal.id
                 diccionarioAnimal["nombre"] = animal.nombre
                 diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
-                diccionarioAnimal["especie"] = animal.especie
+                diccionarioAnimal["especie"] = animal.especie.capitalize()
                 diccionarioAnimal["edad"] = animal.edad
                 diccionarioAnimal["sexo"] = animal.sexo
-                diccionarioAnimal["tamanyo"] = animal.tamanyo
+                diccionarioAnimal["tamanyo"] = animal.tamanyo if animal.tamanyo != "pequenyo" else "pequeño"
 
                 # La añadimos al listado
                 listaAnimales.append(diccionarioAnimal)                                
@@ -566,6 +566,7 @@ class ApiRest(http.Controller):
                 if imagenes and imagenes[0]:
                     for imagen in imagenes:
                         diccionarioImagen = {}
+                        diccionarioImagen["id"] = imagen.id
                         diccionarioImagen["fecha"] = imagen.fecha.strftime("%d/%m/%y")
                         diccionarioImagen["imagen"] = self.ip + "/web/image?model=imagenes&id=" + str(imagen.id) + "&field=imagen"
 
