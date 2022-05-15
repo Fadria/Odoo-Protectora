@@ -477,7 +477,7 @@ class ApiRest(http.Controller):
 
     # Función que nos devolverá el listado de animales filtrados
     @http.route('/apirest/filtrarAnimales', auth="none", cors='*', csrf=False,
-                methods=["GET"], type='json')
+                methods=["POST"], type='json')
     def filtrarAnimales(self, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaAnimales = [] # Listado de animales
@@ -499,12 +499,6 @@ class ApiRest(http.Controller):
 
                 # Indicamos sus valores
                 diccionarioAnimal["id"] = animal.id
-                diccionarioAnimal["nombre"] = animal.nombre
-                diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
-                diccionarioAnimal["especie"] = animal.especie.capitalize()
-                diccionarioAnimal["edad"] = animal.edad
-                diccionarioAnimal["sexo"] = animal.sexo
-                diccionarioAnimal["tamanyo"] = animal.tamanyo if animal.tamanyo != "pequenyo" else "pequeño"
 
                 # La añadimos al listado
                 listaAnimales.append(diccionarioAnimal)                                
@@ -519,7 +513,7 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["data"] = listaAnimales
 
         # Devolvemos la respuesta en el formato cadena
-        return str(diccionarioRespuesta)        
+        return str(diccionarioRespuesta)
 
     # Función que nos devolverá los datos de un animal
     @http.route('/apirest/animales/<id>', auth="none", cors='*', csrf=False,
