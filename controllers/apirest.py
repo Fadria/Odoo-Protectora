@@ -518,7 +518,7 @@ class ApiRest(http.Controller):
     # Función que nos devolverá los datos de un animal
     @http.route('/apirest/animales/<id>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
-    def obtenerRevisiones(self, id, **args):
+    def datosAnimal(self, id, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaDatos = [] # Listado que contendrá los datos del animal
 
