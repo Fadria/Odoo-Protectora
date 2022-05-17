@@ -535,21 +535,21 @@ class ApiRest(http.Controller):
                 diccionarioAnimal["id"] = animal.id
                 diccionarioAnimal["nombre"] = animal.nombre
                 diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
-                diccionarioAnimal["chip"] = animal.chip
-                diccionarioAnimal["especie"] = animal.especie
-                diccionarioAnimal["raza"] = animal.raza
+                diccionarioAnimal["chip"] = "Chipeado" if animal.chip == True else "Sin chipear"
+                diccionarioAnimal["especie"] = animal.especie.capitalize()
+                diccionarioAnimal["raza"] = animal.raza if animal.raza != False else "Sin raza"
                 diccionarioAnimal["nacimiento"] = animal.nacimiento.strftime("%d/%m/%y")
                 diccionarioAnimal["edad"] = animal.edad
                 diccionarioAnimal["sexo"] = animal.sexo
-                diccionarioAnimal["tamanyo"] = animal.tamanyo
-                diccionarioAnimal["urgente"] = animal.urgente
+                diccionarioAnimal["tamanyo"] = animal.tamanyo if animal.tamanyo != "pequenyo" else "pequeño"
+                diccionarioAnimal["urgente"] = "Si" if animal.urgente == True else "No"
                 diccionarioAnimal["peso"] = animal.peso
-                diccionarioAnimal["esterilizado"] = animal.esterilizado
-                diccionarioAnimal["exotico"] = animal.exotico
+                diccionarioAnimal["esterilizado"] = "Si" if animal.esterilizado == True else "No"
+                diccionarioAnimal["exotico"] = "Si" if animal.exotico == True else "No"
                 diccionarioAnimal["observaciones"] = animal.observaciones
-                diccionarioAnimal["pelo"] = animal.pelo
+                diccionarioAnimal["pelo"] = "Si" if animal.pelo == True else "No"
                 diccionarioAnimal["historia"] = animal.historia
-                diccionarioAnimal["perroPeligroso"] = animal.perroPeligroso
+                diccionarioAnimal["perroPeligroso"] = "Si" if animal.perroPeligroso == True else "No"
 
                 listaImagenes = [] # Lista donde guardaremos las imágenes del animal
 
@@ -567,18 +567,15 @@ class ApiRest(http.Controller):
                         listaImagenes.append(diccionarioImagen)
 
                 diccionarioAnimal["imagenes"] = listaImagenes
-
-                # Añadimos el diccionario al listado
-                listaDatos.append(diccionarioAnimal)                                
                 
                 # Indicamos el estado del resultado
                 diccionarioRespuesta["status"] = "ok"
 
             # Añadimos el listado al diccionario de la respuesta
-            diccionarioRespuesta["data"] = listaDatos
+            diccionarioRespuesta["data"] = diccionarioAnimal
 
             # Devolvemos la respuesta en el formato cadena
-            return str(diccionarioRespuesta)      
+            return str(diccionarioRespuesta).replace("'", '"')      
 
         diccionarioRespuesta["status"] = "vacio"
         return str(diccionarioRespuesta)        
