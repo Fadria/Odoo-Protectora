@@ -635,7 +635,7 @@ class ApiRest(http.Controller):
             record = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
             record = record[0]
 
-            if "usuario" in dicDatos:
+            if "usuario" in dicDatos and record.usuario != dicDatos["usuario"]:
                 # Comprobamos si el usuario está en uso
                 userBD = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
 
@@ -645,7 +645,7 @@ class ApiRest(http.Controller):
                     return str(diccionarioRespuesta)
                 record.usuario = dicDatos["usuario"]
 
-            if "email" in dicDatos:
+            if "email" in dicDatos and record.email != dicDatos["email"]:
                 # Comprobamos si el email está en uso
                 emailBD = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
 
