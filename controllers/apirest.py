@@ -582,7 +582,7 @@ class ApiRest(http.Controller):
 
     # Función usada para obtener los datos de un usuario
     @http.route('/apirest/userData', auth="none", cors='*', csrf=False,
-            methods=["GET"], type='json')
+            methods=["POST"], type='json')
             
     def userData(self, **args):
         # Cargamos los datos recibidos en la petición
