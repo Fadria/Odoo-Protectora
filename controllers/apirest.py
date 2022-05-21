@@ -2,7 +2,7 @@
 from odoo import http
 from odoo.http import request
 import json # Manejo del formato JSON
-from uuid import uuid4 # Generación de tokenks
+from uuid import uuid4 # Generación de token
 
 # Librerías relacionadas con la fecha
 from datetime import date
@@ -535,7 +535,7 @@ class ApiRest(http.Controller):
                 diccionarioAnimal["id"] = animal.id
                 diccionarioAnimal["nombre"] = animal.nombre
                 diccionarioAnimal["imagen"] = self.ip + "/web/image?model=animales&id=" + str(animal.id) + "&field=imagen"
-                diccionarioAnimal["chip"] = "Chipeado" if animal.chip == True else "Sin chipear"
+                diccionarioAnimal["chip"] = "Chipeado" if animal.chip == True else "No chipeado"
                 diccionarioAnimal["especie"] = animal.especie.capitalize()
                 diccionarioAnimal["raza"] = animal.raza if animal.raza != False else "Sin raza"
                 diccionarioAnimal["nacimiento"] = animal.nacimiento.strftime("%d/%m/%y")
@@ -578,4 +578,101 @@ class ApiRest(http.Controller):
             return str(diccionarioRespuesta).replace("'", '"')      
 
         diccionarioRespuesta["status"] = "vacio"
-        return str(diccionarioRespuesta)        
+        return str(diccionarioRespuesta)       
+
+    # Función usada para obtener los datos de un usuario
+    @http.route('/apirest/userData', auth="none", cors='*', csrf=False,
+            methods=["GET"], type='json')
+            
+    def userData(self, **args):
+        # Cargamos los datos recibidos en la petición
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
+
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
+        if "token" in dicDatos:
+            # Obtenemos una lista de usuarios que cumplan con la búsqueda
+            record = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
+
+            # Comprobamos que se ha encontrado al menos un usuario
+            if record and record[0]:
+                for usuario in record:
+                    # Preparamos la respuesta a enviar
+                    diccionarioRespuesta["usuario"] = usuario.usuario
+                    diccionarioRespuesta["nombreCompleto"] = usuario.nombreCompleto
+                    diccionarioRespuesta["rol"] = usuario.rol
+                    diccionarioRespuesta["email"] = usuario.email
+                    diccionarioRespuesta["telefono"] = usuario.telefono
+                    diccionarioRespuesta["direccion"] = usuario.direccion
+                    diccionarioRespuesta["ciudad"] = usuario.ciudad
+                    diccionarioRespuesta["codigoPostal"] = usuario.codigoPostal
+                    diccionarioRespuesta["permisoPPP"] = "Con permiso PPP" if usuario.permisoPPP == True else "Sin permiso PPP"
+                    diccionarioRespuesta["fechaNacimiento"] =  usuario.fechaNacimiento.strftime("%d/%m/%y")
+
+                    # Indicamos el estado del resultado
+                    diccionarioRespuesta["status"] = "ok"
+
+                    # Devolvemos la respuesta en el formato cadena
+                    return str(diccionarioRespuesta)
+
+        # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido iniciar sesión
+        diccionarioRespuesta["status"] = "error"
+        return str(diccionarioRespuesta)
+
+    # Función usada para actualizar un usuario
+    @http.route('/apirest/actualizarUsuario', auth="none", cors='*', csrf=False,
+                methods=["PUT"], type='json')
+    def actualizarUsuario(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
+        try:
+            # Cargamos los datos recibidos en la petición
+            dicDatos = json.loads(request.httprequest.data)
+            dicDatos = dicDatos["data"]
+
+            # Comprobamos si el token existe
+            record = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
+            record = record[0]
+
+            if "usuario" in dicDatos:
+                # Comprobamos si el usuario está en uso
+                userBD = http.request.env["usuarios"].sudo().search([('usuario', '=', dicDatos["usuario"])])
+
+                # Está en uso, devolvemos un error
+                if userBD and userBD[0]:
+                    diccionarioRespuesta["status"] = "usuarioUsado"
+                    return str(diccionarioRespuesta)
+                record.usuario = dicDatos["usuario"]
+
+            if "email" in dicDatos:
+                # Comprobamos si el email está en uso
+                emailBD = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
+
+                # Está en uso, devolvemos un error
+                if emailBD and emailBD[0]:
+                    diccionarioRespuesta["status"] = "emailUsado"
+                    return str(diccionarioRespuesta)
+                record.email = dicDatos["email"]
+            
+            if "nombreCompleto" in dicDatos: record.nombreCompleto = dicDatos["nombreCompleto"]
+            if "contrasenya" in dicDatos:record.contrasenya = dicDatos["contrasenya"]
+            if "telefono" in dicDatos: record.telefono = dicDatos["telefono"]
+            if "direccion" in dicDatos: record.direccion = dicDatos["direccion"]
+            if "ciudad" in dicDatos: record.ciudad = dicDatos["ciudad"]
+            if "codigoPostal" in dicDatos: record.codigoPostal = dicDatos["codigoPostal"]
+            if "fechaNacimiento" in dicDatos: record.fechaNacimiento = dicDatos["fechaNacimiento"]
+            if "permisoPPP" in dicDatos: record.permisoPPP = dicDatos["permisoPPP"]
+
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "ok"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)
+        except:
+            # Enviamos una respuesta que contendrá el estado error, ya que no se ha podido actualizar el usuario
+            # Indicamos el estado del resultado
+            diccionarioRespuesta["status"] = "error"
+
+            # Devolvemos la respuesta en el formato cadena
+            return str(diccionarioRespuesta)
