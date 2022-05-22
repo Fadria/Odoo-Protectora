@@ -473,7 +473,7 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["data"] = listaAnimales
 
         # Devolvemos la respuesta en el formato cadena
-        return str(diccionarioRespuesta)
+        return str(diccionarioRespuesta).replace("'", '"')
 
     # Función que nos devolverá el listado de animales filtrados
     @http.route('/apirest/filtrarAnimales', auth="none", cors='*', csrf=False,

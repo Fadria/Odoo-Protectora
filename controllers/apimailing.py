@@ -51,7 +51,7 @@ class ApiMailing(http.Controller):
             return str(diccionarioRespuesta)
 
     # Función usada para enviar una solicitud de información sobre un animal
-    @http.route('/apirest/informacionAnimal', auth="none", cors='*', csrf=False,
+    @http.route('/apirest/informacionAnimal', auth="none", csrf=False,
                 methods=["POST"], type='json')
     def enviarSolicitudAnimal(self, **args):
         # Cargamos los datos recibidos en la petición
