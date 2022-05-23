@@ -35,6 +35,7 @@
                     <field name="autor"/>
                     <field name="fechaPublicacion"/>
                     <field name="imagenPortada" widget="image"/>
+                    <field name="imagenPie" widget="image"/>
                 </group>
 
                 <group>

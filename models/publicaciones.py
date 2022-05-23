@@ -25,6 +25,7 @@ class Publicaciones(models.Model):
     titulo = fields.Char("Título de la publicación", required=True)
     contenido = fields.Text('Contenido', required=True)
     autor = fields.Many2one("usuarios", "Autor", required=True) # Relación con el modelo de usuarios
+    imagenPie = fields.Image("Imagen en el pie")
 
     # FUNCIONES
 

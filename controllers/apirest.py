@@ -305,6 +305,7 @@ class ApiRest(http.Controller):
                 diccionarioPublicacion["titulo"] = publicacion.titulo
                 diccionarioPublicacion["fechaPublicacion"] = publicacion.fechaPublicacion.strftime("%d/%m/%y")
                 diccionarioPublicacion["imagenPortada"] = self.ip + "/web/image?model=publicaciones&id=" + str(publicacion.id) + "&field=imagenPortada"
+                diccionarioPublicacion["imagenPie"] = self.ip + "/web/image?model=publicaciones&id=" + str(publicacion.id) + "&field=imagenPie"
                 diccionarioPublicacion["autor"] = publicacion.autor.nombreCompleto
                 diccionarioPublicacion["contenido"] = publicacion.contenido
 
