@@ -20,7 +20,7 @@ import random
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.134:8069"
+    ip = "http://192.168.1.133:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -134,8 +134,8 @@ class ApiRest(http.Controller):
                 diccionarioRespuesta["status"] = "usuarioUsado"
                 return str(diccionarioRespuesta)
 
-            # Damos el formato necesario a la fecha de nacimiento
-            dicDatos["fechaNacimiento"] = datetime.datetime.strptime(dicDatos["fechaNacimiento"], '%Y-%m-%d')
+            # Damos el formato necesario a la fecha de nacimiento, siempre que haya sido introducida
+            if "fechaNacimiento" in dicDatos: dicDatos["fechaNacimiento"] = datetime.datetime.strptime(dicDatos["fechaNacimiento"], '%Y-%m-%d')
 
             # Por seguridad, indicaremos que el rol es Adoptante, para evitar que en el request podamos recibir otro rol superior
             dicDatos["rol"] = "adoptante"
@@ -604,12 +604,12 @@ class ApiRest(http.Controller):
                     diccionarioRespuesta["nombreCompleto"] = usuario.nombreCompleto
                     diccionarioRespuesta["rol"] = usuario.rol
                     diccionarioRespuesta["email"] = usuario.email
-                    diccionarioRespuesta["telefono"] = usuario.telefono
-                    diccionarioRespuesta["direccion"] = usuario.direccion
-                    diccionarioRespuesta["ciudad"] = usuario.ciudad
-                    diccionarioRespuesta["codigoPostal"] = usuario.codigoPostal
+                    diccionarioRespuesta["telefono"] = "" if usuario.telefono == False else usuario.telefono
+                    diccionarioRespuesta["direccion"] = "" if usuario.direccion == False else usuario.direccion
+                    diccionarioRespuesta["ciudad"] = "" if usuario.ciudad == False else usuario.ciudad
+                    diccionarioRespuesta["codigoPostal"] = "" if usuario.codigoPostal == False else usuario.codigoPostal
                     diccionarioRespuesta["permisoPPP"] = "Con permiso PPP" if usuario.permisoPPP == True else "Sin permiso PPP"
-                    diccionarioRespuesta["fechaNacimiento"] =  usuario.fechaNacimiento.strftime("%d/%m/%y")
+                    if usuario.fechaNacimiento: diccionarioRespuesta["fechaNacimiento"] =  usuario.fechaNacimiento.strftime("%d/%m/%y")
 
                     # Indicamos el estado del resultado
                     diccionarioRespuesta["status"] = "ok"
