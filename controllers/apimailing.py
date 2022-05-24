@@ -89,4 +89,44 @@ class ApiMailing(http.Controller):
         except:
             # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
             diccionarioRespuesta["status"] = "error"
-            return str(diccionarioRespuesta)            
+            return str(diccionarioRespuesta)
+
+    # Función usada para enviar una solicitud de información para convertirse en voluntariado
+    @http.route('/apirest/informacionVoluntariado', auth="none", csrf=False,
+                methods=["POST"], type='json')
+    def recibirMensajeVoluntariado(self, **args):
+        # Cargamos los datos recibidos en la petición
+        dicDatos = json.loads(request.httprequest.data)
+        dicDatos = dicDatos["data"]
+        
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+
+        try:
+            html = ("""\
+            <html>
+            <body>
+                <h1>Solicitud de voluntariado</h1>
+                <p>Email: """ +  dicDatos["email"] +"""</p>
+            </body>
+            </html>
+            """)
+
+            msg = MIMEText(html, "html")
+            msg['Subject'] = "Nuevo Lazo | Solicitud de voluntariado"
+            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['To']      = "fadriacarrasco@gmail.com"
+
+            s = smtplib.SMTP('smtp.mailgun.org', 587)
+
+            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.sendmail(msg['From'], msg['To'], msg.as_string())
+            s.quit()        
+
+            # Enviamos una respuesta que contendrá el estado ok
+            diccionarioRespuesta["status"] = "ok"
+            return str(diccionarioRespuesta)
+
+        except:
+            # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
+            diccionarioRespuesta["status"] = "error"
+            return str(diccionarioRespuesta)
