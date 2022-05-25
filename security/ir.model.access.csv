@@ -6,3 +6,4 @@ acl_revisiones,revisiones_default,model_revisiones,,1,1,1,1
 acl_publicaciones,publicaciones_default,model_publicaciones,,1,1,1,1
 acl_adopciones,adopciones_default,model_adopciones,,1,1,1,1
 acl_graficos,graficos_default,model_graficos,,1,1,1,1
+acl_requisitos,requisitos_default,model_requisitos,,1,1,1,1

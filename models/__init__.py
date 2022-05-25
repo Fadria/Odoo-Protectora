@@ -6,3 +6,4 @@ from . import revisiones
 from . import publicaciones
 from . import adopciones
 from . import graficos
+from . import requisitos

@@ -26,11 +26,8 @@
         'views/revisiones.xml',
         'views/publicaciones.xml',
         'views/adopciones.xml',
-        'views/graficos.xml'
-
-        # Ficheros usados para generar informes
-
-        # Ficheros usados para crear wizards
+        'views/graficos.xml',
+        'views/requisitos.xml'
     ],
     # Fichero con data de demo si se inicializa la base de datos con "demo data" (No incluido en ejemplo)
     # 'demo': [

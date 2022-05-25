@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='requisitos_action' model='ir.actions.act_window'>
+        <field name="name">Requisitos</field> <!-- Nombre de la ventana -->
+        <field name="res_model">requisitos</field> <!-- Indicamos el modelo en el que se basa la vista -->
+        <field name="view_mode">tree,form</field> <!-- Indicamos los diferentes modos de visualización -->
+    </record>
+
+    <!-- Añadimos esta vista al menú principal -->
+    <menuitem name="Requisitos" id="requisitos" action="requisitos_action" parent="protectora_animales"/>
+
+    <!-- Vista en formato de árbol -->
+    <record id="requisitos_tree" model="ir.ui.view">
+        <field name="name">Lista de requisitos</field> <!-- Nombre de la vista -->
+        <field name="model">requisitos</field> <!-- Modelo usado en la vista -->
+        <field name="arch" type="xml">
+            <!-- Indicamos los campos del modelo a mostrar -->
+            <tree> 
+                <field name="id"/>
+                <field name="titulo"/>
+                <field name="contenido"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista formulario -->
+    <record id="requisitos_view_form" model="ir.ui.view">
+        <field name="name">Formulario de creación de requisitos</field>
+        <field name="model">requisitos</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="titulo"/>
+                    <field name="contenido"/>
+                </group>
+
+                <group>
+                    <field name="imagen" widget="image"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>
