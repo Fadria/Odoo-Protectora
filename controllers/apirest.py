@@ -20,7 +20,7 @@ import random
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.133:8069"
+    ip = "http://192.168.1.135:8069"
 
     # Función usada para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
@@ -677,3 +677,70 @@ class ApiRest(http.Controller):
 
             # Devolvemos la respuesta en el formato cadena
             return str(diccionarioRespuesta)
+
+    # Función que nos devolverá el listado de requisitos y recomendaciones
+    @http.route('/apirest/requisitos', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def requisitos(self, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaRequisitos = [] # Listado de requisitos
+
+        # Obtenemos una lista de requisitos
+        record = http.request.env["requisitos"].sudo().search([])
+
+        # Comprobamos que se ha encontrado al menos un requisito
+        if record and record[0]:
+            for requisito in record:
+                # Inicializamos el diccionario que contendrá los datos del requisito
+                diccionarioRequisito = {}
+
+                # Indicamos sus valores
+                diccionarioRequisito["id"] = requisito.id
+                diccionarioRequisito["titulo"] = requisito.titulo
+                diccionarioRequisito["contenido"] = requisito.contenido
+                diccionarioRequisito["imagen"] = self.ip + "/web/image?model=requisitos&id=" + str(requisito.id) + "&field=imagen"
+
+                # La añadimos al listado
+                listaRequisitos.append(diccionarioRequisito)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaRequisitos
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)            
+
+    # Función que nos devolverá los datos de un requisito
+    @http.route('/apirest/requisitos/<idRequisito>', auth="none", cors='*', csrf=False,
+                methods=["GET"], type='http')
+    def obtenerRequisito(self, idRequisito, **args):
+        diccionarioRespuesta = {} # Diccionario de la respuesta
+        listaRequisitos = [] # Listado de publicaciones
+
+        # Obtenemos una lista de requisitos que cumplan con la búsqueda
+        record = http.request.env["requisitos"].sudo().search([("id", "=", idRequisito)])
+
+        # Comprobamos que se ha encontrado al menos un requisito
+        if record and record[0]:
+            for requisito in record:
+                # Inicializamos el diccionario que contendrá los datos del requisito
+                diccionarioRequisito = {}
+
+                # Indicamos sus valores
+                diccionarioRequisito["titulo"] = requisito.titulo
+                diccionarioRequisito["contenido"] = requisito.contenido
+                diccionarioRequisito["imagen"] = self.ip + "/web/image?model=requisitos&id=" + str(requisito.id) + "&field=imagen"
+
+                # La añadimos al listado
+                listaRequisitos.append(diccionarioRequisito)                                
+                
+                # Indicamos el estado del resultado
+                diccionarioRespuesta["status"] = "ok"
+
+            # Añadimos el listado al diccionario de la respuesta
+            diccionarioRespuesta["data"] = listaRequisitos
+
+        # Devolvemos la respuesta en el formato cadena
+        return str(diccionarioRespuesta)
