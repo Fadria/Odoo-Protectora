@@ -710,7 +710,7 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["data"] = listaRequisitos
 
         # Devolvemos la respuesta en el formato cadena
-        return str(diccionarioRespuesta)            
+        return str(diccionarioRespuesta).replace("'", '"')         
 
     # Función que nos devolverá los datos de un requisito
     @http.route('/apirest/requisitos/<idRequisito>', auth="none", cors='*', csrf=False,
@@ -743,4 +743,4 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["data"] = listaRequisitos
 
         # Devolvemos la respuesta en el formato cadena
-        return str(diccionarioRespuesta)
+        return str(diccionarioRespuesta).replace("'", '"')
