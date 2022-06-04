@@ -1,3 +1,10 @@
+
+"""
+  @Author: Federico Adrià Carrasco
+  @Date: 04/06/2022
+  @Email: fadriacarrasco@gmail.com
+"""
+
 from odoo import http
 from odoo.http import request
 

@@ -1,3 +1,10 @@
+
+"""
+  @Author: Federico Adrià Carrasco
+  @Date: 04/06/2022
+  @Email: fadriacarrasco@gmail.com
+"""
+
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
