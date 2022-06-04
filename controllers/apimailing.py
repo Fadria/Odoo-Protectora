@@ -10,6 +10,10 @@ from email.mime.text import MIMEText
 # Clase usada para los endpoints relacionados con el envío de emails
 class ApiMailing(http.Controller):
 
+    # Datos usados por el servidor de envío de emails
+    mailgunEmail = "DATOS DISPONIBLES EN EL MANUAL DE DESPLIEGUE"
+    mailgunPassword = "DATOS DISPONIBLES EN EL MANUAL DE DESPLIEGUE"
+
     # Endpoint usado para realizar el envío de un email para contactar con la protectora
     @http.route('/apirest/contacto', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
@@ -36,14 +40,14 @@ class ApiMailing(http.Controller):
             # Preparación de los datos del email
             msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud de información"
-            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['From']    = self.mailgunEmail
             msg['To']      = "fadriacarrasco@gmail.com"
 
             # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
             # Iniciamos sesión con las credenciales de cuenta
-            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.login(self.mailgunEmail, self.mailgunPassword)
 
             # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
@@ -83,14 +87,14 @@ class ApiMailing(http.Controller):
             # Preparación de los datos del email
             msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud animal"
-            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['From']    = self.mailgunEmail
             msg['To']      = "fadriacarrasco@gmail.com"
 
             # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
             # Iniciamos sesión con las credenciales de cuenta
-            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.login(self.mailgunEmail, self.mailgunPassword)
 
             # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
@@ -129,14 +133,14 @@ class ApiMailing(http.Controller):
             # Preparación de los datos del email
             msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud de voluntariado"
-            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['From']    = self.mailgunEmail
             msg['To']      = "fadriacarrasco@gmail.com"
 
             # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
             # Iniciamos sesión con las credenciales de cuenta
-            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.login(self.mailgunEmail, self.mailgunPassword)
 
             # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())

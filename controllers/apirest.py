@@ -22,6 +22,10 @@ class ApiRest(http.Controller):
     # IP de nuestro servidor Odoo
     ip = "http://192.168.1.133:8069"
 
+    # Datos usados por el servidor de envío de emails
+    mailgunEmail = "DATOS DISPONIBLES EN EL MANUAL DE DESPLIEGUE"
+    mailgunPassword = "DATOS DISPONIBLES EN EL MANUAL DE DESPLIEGUE"
+
     # Endpoint usado para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
             methods=["POST"], type='json')
@@ -207,14 +211,14 @@ class ApiRest(http.Controller):
             msg['Subject'] = "Solicitud de recuperación de contraseña"
 
             # Iniciamos sesión con las credenciales de cuenta
-            msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
+            msg['From']    = self.mailgunEmail
             msg['To']      = record.email
 
             # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
             # Iniciamos sesión con las credenciales de cuenta
-            s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+            s.login(self.mailgunEmail, self.mailgunPassword)
 
             # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
