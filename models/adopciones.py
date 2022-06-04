@@ -9,10 +9,8 @@ class Adopciones(models.Model):
     _name = 'adopciones'
     _description = 'Adopciones de la protectora'
 
-
     # PARÁMETROS DE ORDENACIÓN POR DEFECTO
     _order = 'vigente desc, fecha desc'
-
 
     # Como no tenemos un atributo "name" en nuestro modelo, indicamos que cuando
     # se necesite un nombre, se usara el atributo id

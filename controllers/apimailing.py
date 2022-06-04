@@ -7,8 +7,10 @@ import json # Manejo del formato JSON
 import smtplib
 from email.mime.text import MIMEText
 
+# Clase usada para los endpoints relacionados con el envío de emails
 class ApiMailing(http.Controller):
-    # Función usada para enviar una solicitud de información
+
+    # Endpoint usado para realizar el envío de un email para contactar con la protectora
     @http.route('/apirest/contacto', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def recibirMensajeContacto(self, **args):
@@ -19,6 +21,7 @@ class ApiMailing(http.Controller):
         diccionarioRespuesta = {} # Diccionario de la respuesta
 
         try:
+            # Variable que contendrá el HTML usado en el email
             html = ("""\
             <html>
             <body>
@@ -30,14 +33,19 @@ class ApiMailing(http.Controller):
             </html>
             """)
 
-            msg = MIMEText(html, "html")
+            # Preparación de los datos del email
+            msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud de información"
             msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
             msg['To']      = "fadriacarrasco@gmail.com"
 
+            # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
+            # Iniciamos sesión con las credenciales de cuenta
             s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+
+            # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
             s.quit()        
 
@@ -46,11 +54,11 @@ class ApiMailing(http.Controller):
             return str(diccionarioRespuesta)
 
         except:
-            # Enviamos una respuesta que contendrá el estado error, ya que no se ha encontrado el email del usuario
+            # Enviamos una respuesta que contendrá el estado error
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
 
-    # Función usada para enviar una solicitud de información sobre un animal
+    # Endpoint usado para realizar el envío de un email para solicitar información sobre un animal
     @http.route('/apirest/informacionAnimal', auth="none", csrf=False,
                 methods=["POST"], type='json')
     def enviarSolicitudAnimal(self, **args):
@@ -61,6 +69,7 @@ class ApiMailing(http.Controller):
         diccionarioRespuesta = {} # Diccionario de la respuesta
 
         try:
+            # Variable que contendrá el HTML usado en el email
             html = ("""\
             <html>
             <body>
@@ -71,14 +80,19 @@ class ApiMailing(http.Controller):
             </html>
             """)
 
-            msg = MIMEText(html, "html")
+            # Preparación de los datos del email
+            msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud animal"
             msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
             msg['To']      = "fadriacarrasco@gmail.com"
 
+            # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
+            # Iniciamos sesión con las credenciales de cuenta
             s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+
+            # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
             s.quit()        
 
@@ -91,7 +105,7 @@ class ApiMailing(http.Controller):
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
 
-    # Función usada para enviar una solicitud de información para convertirse en voluntariado
+    # Endpoint usado para realizar el envío de un email para solicitar formar parte del voluntariado
     @http.route('/apirest/informacionVoluntariado', auth="none", csrf=False,
                 methods=["POST"], type='json')
     def recibirMensajeVoluntariado(self, **args):
@@ -102,6 +116,7 @@ class ApiMailing(http.Controller):
         diccionarioRespuesta = {} # Diccionario de la respuesta
 
         try:
+            # Variable que contendrá el HTML usado en el email
             html = ("""\
             <html>
             <body>
@@ -111,14 +126,19 @@ class ApiMailing(http.Controller):
             </html>
             """)
 
-            msg = MIMEText(html, "html")
+            # Preparación de los datos del email
+            msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Nuevo Lazo | Solicitud de voluntariado"
             msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
             msg['To']      = "fadriacarrasco@gmail.com"
 
+            # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
+            # Iniciamos sesión con las credenciales de cuenta
             s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+
+            # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
             s.quit()        
 

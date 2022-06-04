@@ -20,9 +20,9 @@ import random
 class ApiRest(http.Controller):
 
     # IP de nuestro servidor Odoo
-    ip = "http://192.168.1.135:8069"
+    ip = "http://192.168.1.133:8069"
 
-    # Función usada para realizar un login
+    # Endpoint usado para realizar un login
     @http.route('/apirest/login', auth="none", cors='*', csrf=False,
             methods=["POST"], type='json')
             
@@ -68,7 +68,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "error"
         return str(diccionarioRespuesta)
 
-    # Función usada para realizar un login
+    # Endpoint usado para realizar un login mediante el token de seguridad
     @http.route('/apirest/loginToken', auth="none", cors='*', csrf=False,
             methods=["POST"], type='json')
             
@@ -87,7 +87,10 @@ class ApiRest(http.Controller):
             if record and record[0]:
                 for usuario in record:
 
+                    # Obtenemos la fecha actual
                     today = date.today()
+
+                    # Si el token no ha actualizado devolveremos los datos pertinentes
                     if usuario.tokenCaducidad > today:
                         # Preparamos la respuesta a enviar
                         diccionarioRespuesta["usuario"] = usuario.usuario # Nombre del usuario
@@ -106,7 +109,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "error"
         return str(diccionarioRespuesta)
 
-    # Función usada para realizar un registro
+    # Endpoint usado para realizar un registro
     @http.route('/apirest/registro', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def registro(self, **args):
@@ -173,7 +176,7 @@ class ApiRest(http.Controller):
             return str(diccionarioRespuesta)
 
 
-    # Función usada para recuperar la contraseña
+    # Endpoint usado para recuperar la contraseña
     @http.route('/apirest/recuperarContrasenya', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def recuperarContrasenya(self, **args):
@@ -188,6 +191,7 @@ class ApiRest(http.Controller):
             record = http.request.env["usuarios"].sudo().search([('email', '=', dicDatos["email"])])
             record.contrasenya = uuid4()
 
+            # Variable que contendrá el HTML usado en el email
             html = ("""\
             <html>
             <body>
@@ -198,14 +202,21 @@ class ApiRest(http.Controller):
             </html>
             """)
 
-            msg = MIMEText(html, "html")
+            # Preparación de los datos del email
+            msg = MIMEText(html, "html") # Se indica el cuerpo, que contendrá el HTML definido anteriormente
             msg['Subject'] = "Solicitud de recuperación de contraseña"
+
+            # Iniciamos sesión con las credenciales de cuenta
             msg['From']    = "postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org"
             msg['To']      = record.email
 
+            # Indicamos el servidor a utilizar
             s = smtplib.SMTP('smtp.mailgun.org', 587)
 
+            # Iniciamos sesión con las credenciales de cuenta
             s.login('postmaster@sandbox0d79cad6a2f0428b890f0244f1865b7a.mailgun.org', '05dfa61f485be672ccda8e7a0e5724bb-162d1f80-2641c3f7')
+
+            # Se envía el email y se cierra el servicio
             s.sendmail(msg['From'], msg['To'], msg.as_string())
             s.quit()        
 
@@ -218,7 +229,7 @@ class ApiRest(http.Controller):
             diccionarioRespuesta["status"] = "error"
             return str(diccionarioRespuesta)
 
-    # Función usada para realizar un logout
+    # Endpoint usado para realizar un logout
     @http.route('/apirest/logout', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def logout(self, **args):
@@ -249,14 +260,14 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "error"
         return str(diccionarioRespuesta)
 
-    # Función que nos devolverá el listado de publicaciones
+    # Endpoint que nos devolverá el listado de publicaciones
     @http.route('/apirest/publicaciones', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def publicaciones(self, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaPublicaciones = [] # Listado de publicaciones
 
-        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        # Obtenemos una lista de publicaciones que cumplan con la búsqueda
         record = http.request.env["publicaciones"].sudo().search([])
 
         # Comprobamos que se ha encontrado al menos una publicación
@@ -285,14 +296,14 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
 
-    # Función que nos devolverá los datos de una publicación
+    # Endpoint que nos devolverá los datos de una publicación
     @http.route('/apirest/publicaciones/<idPublicacion>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def obtenerPublicacion(self, idPublicacion, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaPublicaciones = [] # Listado de publicaciones
 
-        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        # Obtenemos una lista de publicaciones que cumplan con la búsqueda
         record = http.request.env["publicaciones"].sudo().search([("id", "=", idPublicacion)])
 
         # Comprobamos que se ha encontrado al menos una publicación
@@ -321,14 +332,14 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
 
-    # Función que nos devolverá el listado de gráficos
+    # Endpoint que nos devolverá el listado de gráficos
     @http.route('/apirest/graficos', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def graficos(self, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaGraficos = [] # Listado de gráficos
 
-        # Obtenemos una lista de usuarios que cumplan con la búsqueda
+        # Obtenemos una lista de gráficos que cumplan con la búsqueda
         record = http.request.env["graficos"].sudo().search([])
 
         # Comprobamos que se ha encontrado al menos un gráfico
@@ -354,7 +365,7 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)        
 
-    # Función que nos devolverá los datos de una publicación
+    # Endpoint que nos devolverá los datos de una publicación
     @http.route('/apirest/revisiones/<idAnimal>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def obtenerRevisiones(self, idAnimal, **args):
@@ -391,7 +402,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "vacio"
         return str(diccionarioRespuesta)
 
-    # Función usada para crear un nuevo registro
+    # Endpoint usado para crear un nuevo registro
     @http.route('/apirest/nuevaRevision', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def nuevaRevision(self, **args):
@@ -401,8 +412,6 @@ class ApiRest(http.Controller):
             # Cargamos los datos recibidos en la petición
             dicDatos = json.loads(request.httprequest.data)
             dicDatos = dicDatos["data"]
-
-            # COMPROBAR SI EL TOKEN PERTENECE A UN USUARIO VOLUTARIO
 
             # Comprobamos si el token pertenece a un voluntario
             usuario = http.request.env["usuarios"].sudo().search([('token', '=', dicDatos["token"])])
@@ -436,7 +445,7 @@ class ApiRest(http.Controller):
             # Devolvemos la respuesta en el formato cadena
             return str(diccionarioRespuesta)        
 
-    # Función que nos devolverá el listado de animales
+    # Endpoint que nos devolverá el listado de animales
     @http.route('/apirest/animales', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def animales(self, **args):
@@ -476,7 +485,7 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta).replace("'", '"')
 
-    # Función que nos devolverá el listado de animales filtrados
+    # Endpoint que nos devolverá el listado de animales filtrados
     @http.route('/apirest/filtrarAnimales', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def filtrarAnimales(self, **args):
@@ -486,8 +495,6 @@ class ApiRest(http.Controller):
         # Cargamos los datos recibidos en la petición
         dicDatos = json.loads(request.httprequest.data)
         dicDatos = dicDatos["data"]
-
-        buscarDatos = True # Variable que cambiaremos a false cuando no sea necesario realizar más consultas
 
         # Obtenemos una lista de animales
         record = http.request.env["animales"].sudo().search([ ('especie', '=', dicDatos["especie"]), ('sexo', '=', dicDatos["sexo"]), ('tamanyo', '=', dicDatos["tamanyo"]) ])            
@@ -516,14 +523,14 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)
 
-    # Función que nos devolverá los datos de un animal
+    # Endpoint que nos devolverá los datos de un animal
     @http.route('/apirest/animales/<id>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def datosAnimal(self, id, **args):
         diccionarioRespuesta = {} # Diccionario de la respuesta
         listaDatos = [] # Listado que contendrá los datos del animal
 
-        # Obtenemos la lista de revisiones del animal
+        # Obtenemos la lista que contendrá el registro del animal
         record = http.request.env["animales"].sudo().search([("id", "=", id)])
 
         # Comprobamos que se ha encontrado un animal
@@ -581,7 +588,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "vacio"
         return str(diccionarioRespuesta)       
 
-    # Función usada para obtener los datos de un usuario
+    # Endpoint usado para obtener los datos de un usuario
     @http.route('/apirest/userData', auth="none", cors='*', csrf=False,
             methods=["POST"], type='json')
             
@@ -621,7 +628,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "error"
         return str(diccionarioRespuesta)
 
-    # Función usada para actualizar un usuario
+    # Endpoint usado para actualizar un usuario
     @http.route('/apirest/actualizarUsuario', auth="none", cors='*', csrf=False,
                 methods=["PUT"], type='json')
     def actualizarUsuario(self, **args):
@@ -678,7 +685,7 @@ class ApiRest(http.Controller):
             # Devolvemos la respuesta en el formato cadena
             return str(diccionarioRespuesta)
 
-    # Función que nos devolverá el listado de requisitos y recomendaciones
+    # Endpoint que nos devolverá el listado de requisitos y recomendaciones
     @http.route('/apirest/requisitos', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def requisitos(self, **args):
@@ -712,7 +719,7 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta).replace("'", '"')         
 
-    # Función que nos devolverá los datos de un requisito
+    # Endpoint que nos devolverá los datos de un requisito
     @http.route('/apirest/requisitos/<idRequisito>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def obtenerRequisito(self, idRequisito, **args):

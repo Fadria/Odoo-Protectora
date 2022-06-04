@@ -14,7 +14,7 @@ class Usuarios(models.Model):
 
 
     # Como no tenemos un atributo "name" en nuestro modelo, indicamos que cuando
-    # se necesite un nombre, se usara el atributo id
+    # se necesite un nombre, se usara el atributo usuario
     _rec_name = 'usuario'    
 
     # VARIABLES QUE USAREMOS EN LOS CAMPOS SELECTION
