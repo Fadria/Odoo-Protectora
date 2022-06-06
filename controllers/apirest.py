@@ -376,7 +376,7 @@ class ApiRest(http.Controller):
         # Devolvemos la respuesta en el formato cadena
         return str(diccionarioRespuesta)        
 
-    # Endpoint que nos devolverá los datos de una publicación
+    # Endpoint que nos devolverá el listado de revisiones de un animal
     @http.route('/apirest/revisiones/<idAnimal>', auth="none", cors='*', csrf=False,
                 methods=["GET"], type='http')
     def obtenerRevisiones(self, idAnimal, **args):
@@ -413,7 +413,7 @@ class ApiRest(http.Controller):
         diccionarioRespuesta["status"] = "vacio"
         return str(diccionarioRespuesta)
 
-    # Endpoint usado para crear un nuevo registro
+    # Endpoint usado para crear una nueva revisión
     @http.route('/apirest/nuevaRevision', auth="none", cors='*', csrf=False,
                 methods=["POST"], type='json')
     def nuevaRevision(self, **args):
@@ -627,7 +627,7 @@ class ApiRest(http.Controller):
                     diccionarioRespuesta["ciudad"] = "" if usuario.ciudad == False else usuario.ciudad
                     diccionarioRespuesta["codigoPostal"] = "" if usuario.codigoPostal == False else usuario.codigoPostal
                     diccionarioRespuesta["permisoPPP"] = "Con permiso PPP" if usuario.permisoPPP == True else "Sin permiso PPP"
-                    if usuario.fechaNacimiento: diccionarioRespuesta["fechaNacimiento"] =  usuario.fechaNacimiento.strftime("%d/%m/%y")
+                    diccionarioRespuesta["fechaNacimiento"] = "" if usuario.fechaNacimiento == False else usuario.fechaNacimiento.strftime("%d/%m/%y")
 
                     # Indicamos el estado del resultado
                     diccionarioRespuesta["status"] = "ok"
